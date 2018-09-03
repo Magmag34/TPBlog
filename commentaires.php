@@ -21,42 +21,52 @@ $donnees= $req->fetch();
 <html>
     <head>
         <meta charset="utf-8" />
-        <title>Mon blog avec commentaires</title>
+        <title>Mes commentaires</title>
 	<link href="style.css" rel="stylesheet" /> 
     </head>
         
     <body>
-    <?php
-    // On récupère les 5 derniers billets
-    ?>
-        <h1>Mon super blog !</h1>
+    <!-- On récupère le détail du billet sélectionné-->
         <p><a href="index.php">Retour à la liste des billets</a></p>
         <p>
         <strong>Billet</strong> : <?php echo $donnees['titre']; ?><br />
-        Contenu du Billet : <?php echo $donnees['contenu']; ?>,
-        <em>Date du Billet : <?php echo $donnees['date_creation']; ?>,</em>
+        Contenu du Billet : <?php echo $donnees['contenu']; ?><br />
+        <em>Date du Billet : <?php echo $donnees['date_creation']; ?></em><br />
+        <br />
 
 <?php
     // On récupère les commentaires du billet sélectionné
-$req = $bdd->prepare('SELECT * FROM commentaires WHERE id = ?');
+$req = $bdd->prepare('SELECT * FROM commentaires WHERE id_billet = ?');
 
     // On récupère l'id contenu dans l'URL
 $req->execute(array($_GET['id']));
-$donnees= $req->fetch();
-?>
-        <!-- Mise en place du lien vers la page Commentaire -->
-       </p>
+?>       
+    <p>
+        <strong>Liste des mes commentaires :</strong><br />
+    </p>
+<?php
+    // On affiche le contenu des commentaires
 
-        <p>Liste des mes commentaires</p>
+    while ($donnees = $req->fetch())
+    {
+    ?>
         <p>
-        <strong></strong> : <?php echo $donnees['auteur']; ?><br />
-        Contenu du Billet : <?php echo $donnees['commentaire']; ?>,
-        <em>Date du Billet : <?php echo $donnees['date_creation']; ?>,</em>
-
-
+        <?php echo $donnees['id']; ?><br />
+        <em>Date du Commentaire : <?php echo $donnees['date_commentaire']; ?></em><br />
+        Auteur du Commentaire : <?php echo $donnees['auteur']; ?><br />
+        Contenu : <?php echo $donnees['commentaire']; ?><br />
+       </p>
         <!-- Mise en place du lien vers la page Commentaire -->
-        <a href="commentaires.php?id=<?php echo $donnees['id']; ?>">Commentaire de ce billet</a>
        </p>
 
+    <?php
+         // Fin de la boucle des commentaires
+
+    }
+    // Termine le traitement de la requête
+
+    $req->closeCursor(); 
+
+?>
     </body>
 </html>
