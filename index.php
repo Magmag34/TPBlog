@@ -34,7 +34,9 @@ $reponse = $bdd->query('SELECT * FROM billets ORDER BY id DESC LIMIT 0, 5');
     ?>
         <p>
         <strong>Billet</strong> : <?php echo $donnees['titre']; ?><br />
-        Contenu du Billet : <?php echo $donnees['contenu']; ?><br />
+        Contenu du Billet : <?php echo $donnees['contenu']; ?>
+        </p>
+        <p>
         <em>Date du Billet : <?php echo $donnees['date_creation']; ?>,</em>
         <!-- Mise en place du lien vers la page Commentaire -->
         <a href="commentaires.php?id=<?php echo $donnees['id']; ?>">Commentaire de ce billet</a>
