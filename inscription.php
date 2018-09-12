@@ -9,31 +9,61 @@
             die('Erreur : '.$e->getMessage());
     }
 ?>
-<?php 
-// Vérification de la validité des informations
-$pseudo=$_POST["pseudo"];
-$email=$_POST["email"];
-
-// Hachage du mot de passe
-$pass_hache = password_hash($_POST['pass'], PASSWORD_DEFAULT);
-
-// Insertion
-try
-    {
-        $req = $bdd->prepare('INSERT INTO membres(pseudonyme, password, email) VALUES(:pseudo, :pass, :email);');
-        $result=$req->execute(array(
-        'pseudo' => $pseudo,
-        'pass' => $pass_hache,
-        'email' => $email));
-        var_dump($result);
-    }
-    catch(Exception $e)
-    {
-            die('Erreur : '.$e->getMessage());
-    }
-
-
+<?php
+phpinfo();
 ?>
+<?php 
+if (isset($_POST["pseudo"])) {
+   
+
+    // Vérification de la validité des informations
+    $pseudo=$_POST["pseudo"];
+    $email=$_POST["email"];
+
+    // Hachage du mot de passe
+    $pass_hache = password_hash($_POST['pass'], PASSWORD_DEFAULT);
+
+    // Insertion des valeurs
+    
+    $req = $bdd->prepare('INSERT INTO membres(pseudonyme, password, email) VALUES(:pseudo, :pass, :email);');
+    $result = $req->execute(array(
+    'pseudo' => $pseudo,
+    'pass' => $pass_hache,
+    'email' => $email));
+
+    // Vérification de la valeur du mail
+
+    if ($result != 1 && $req->errorInfo()[1] == 1062) 
+    {
+        echo("merci de rentrer un email unique");
+    } 
+
+    // Vérification du formatage du mail
+
+     $password = $_POST['email'];
+ 
+    if (preg_match('#\@#', $email)) {
+        echo 'Mail conforme';
+    }
+    
+    else {
+        echo 'Mail non conforme';
+    }     
+ ?>       
+<?php
+        // Vérification du formatage du mot de passe
+
+    $password = $_POST['password'];
+ 
+    if (preg_match('#^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).{6,}$#', $password)) {
+        echo 'Mot de passe conforme';
+    }
+    
+    else {
+        echo 'Mot de passe non conforme';
+    }   
+?>
+
 <!DOCTYPE html>
 <html>
     <head>
