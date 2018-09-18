@@ -1,31 +1,51 @@
+<?php
+    // Connexion à ma base de données TPBlog
+    try
+    {
+        $bdd = new PDO('mysql:host=localhost;dbname=TPBlog;charset=utf8', 'tpblog', 'tpblog');
+    }
+    catch(Exception $e)
+    {
+            die('Erreur : '.$e->getMessage());
+    }
+?>
 <?php 
 
-//  Récupération de l'utilisateur et de son pass hashé
-$req = $bdd->prepare('SELECT id, pass FROM membres WHERE pseudo = :pseudo');
-$req->execute(array(
-    'pseudo' => $pseudo));
-$resultat = $req->fetch();
+if (isset($_POST["email"])) {
+   
 
-// Comparaison du pass envoyé via le formulaire avec la base
-$isPasswordCorrect = password_verify($_POST['pass'], $resultat['pass']);
+    // Vérification de la validité des informations
+    $error = false;
 
-if (!$resultat)
-{
-    echo 'Mauvais identifiant ou mot de passe !';
-}
-else
-{
-    if ($isPasswordCorrect) {
-        session_start();
-        $_SESSION['id'] = $resultat['id'];
-        $_SESSION['pseudo'] = $pseudo;
-        echo 'Vous êtes connecté !';
-    }
-    else {
+    $email = $_POST["email"];
+    $pass = $_POST["pass"];
+
+    //  Récupération de l'utilisateur et de son pass hashé
+    $req = $bdd->prepare('SELECT id, pass FROM membres WHERE pseudo = :pseudo');
+    $req->execute(array(
+        'pseudo' => $pseudo));
+    $resultat = $req->fetch();
+
+    // Comparaison du pass envoyé via le formulaire avec la base
+    $isPasswordCorrect = password_verify($_POST['pass'], $resultat['pass']);
+
+    if (!$resultat)
+    {
         echo 'Mauvais identifiant ou mot de passe !';
     }
-}
-
+    else
+    {
+        if ($isPasswordCorrect) {
+            session_start();
+            $_SESSION['id'] = $resultat['id'];
+            $_SESSION['pseudo'] = $pseudo;
+            echo 'Vous êtes connecté !';
+        }
+        else {
+            echo 'Mauvais identifiant ou mot de passe !';
+        }
+    }
+  }
 // Mise en place de la session
 
     session_start();
@@ -49,3 +69,27 @@ else
     }
 
 ?>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Ma page de connexion</title>
+    <link href="style.css" rel="stylesheet" /> 
+    </head>
+
+    <body>
+        <h1>Connexion</h1>
+
+        <!-- Formulaire de connexion du membre-->
+        <em><p>Connexion à votre espace membre</p></em>
+        <form action="connexion.php" method="post">
+            <p> Votre email : <input type="text" name="email" /></p>
+            <p>Votre mot de passe : <input type="text" name="password" /></p>
+            <p><input type="submit" value="OK"></p>
+        </form>
+
+        <!-- On récupère le détail du billet sélectionné-->
+        <p><a href="index.php">Retour à la liste des billets</a></p>
+
+    </body>
+</html>

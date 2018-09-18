@@ -24,7 +24,7 @@ $reponse = $bdd->query('SELECT * FROM billets ORDER BY id DESC LIMIT 0, 5');
         
     <body>
         <h1>Mon super blog !</h1>
-        <p>Derniers billets du blog :</p>
+        <p>Les billets du blog :</p>
  
 
 <?php
@@ -51,7 +51,6 @@ $reponse = $bdd->query('SELECT * FROM billets ORDER BY id DESC LIMIT 0, 5');
     $reponse->closeCursor(); 
 
 ?>
-    <a href="inscription.php">S'inscrire</a>
-
+    <a href="inscription.php">S'inscrire</a>/<a href="connexion.php">Connexion</a>
     </body>
 </html>
