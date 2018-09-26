@@ -1,13 +1,12 @@
 <?php
-    // Connexion à ma base de données TPBlog
-    try
-    {
-        $bdd = new PDO('mysql:host=localhost;dbname=TPBlog;charset=utf8', 'tpblog', 'tpblog');
-    }
-    catch(Exception $e)
-    {
-            die('Erreur : '.$e->getMessage());
-    }
+    session_start();
+
+    // DB Acces  TPBlog
+    require('model.php');
+
+    $req = getBillets();
+
+
 ?>
 <?php
     // On récupère l'id du billet sélectionné
@@ -33,7 +32,15 @@ $donnees= $req->fetch();
         Contenu du Billet : <?php echo $donnees['contenu']; ?><br />
         <em>Date du Billet : <?php echo $donnees['date_creation']; ?></em><br />
         <br />
+<?php
+    // On teste la session à l'affichage
 
+    if (isset($_SESSION['id']) AND isset($_SESSION['pseudo']))
+    {
+        echo 'Bonjour, votre numéro de session est:" ' . $_SESSION['pseudo'];
+    }
+
+?>
 <?php
     // On récupère les commentaires du billet sélectionné
 $req = $bdd->prepare('SELECT * FROM commentaires WHERE id_billet = ?');

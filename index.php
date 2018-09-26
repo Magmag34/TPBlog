@@ -1,56 +1,18 @@
 <?php
-    // Connexion à ma base de données TPBlog
-    try
+    session_start();
+
+    // DB Acces  TPBlog
+    require('model.php');
+
+    $req = getBillets();
+
+    require('indexview.php');
+
+    // On teste la session à l'affichage
+
+    if (isset($_SESSION['id']) AND isset($_SESSION['pseudo']))
     {
-        $bdd = new PDO('mysql:host=localhost;dbname=TPBlog;charset=utf8', 'tpblog', 'tpblog');
+        echo 'Bonjour, votre numéro de session est:" ' . $_SESSION['pseudo'];
     }
-    catch(Exception $e)
-    {
-            die('Erreur : '.$e->getMessage());
-    }
-?>
-<?php
-    // On récupère les 5 derniers billets
-$reponse = $bdd->query('SELECT * FROM billets ORDER BY id DESC LIMIT 0, 5');
-?>
 
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8" />
-        <title>Mon blog avec commentaires</title>
-    <link href="style.css" rel="stylesheet" /> 
-    </head>
-        
-    <body>
-        <h1>Mon super blog !</h1>
-        <p>Les billets du blog :</p>
- 
 
-<?php
-    // On affiche le contenu du billet
-    while ($donnees = $reponse->fetch())
-    {
-    ?>
-        <p>
-        <strong>Billet</strong> : <?php echo $donnees['titre']; ?><br />
-        Contenu du Billet : <?php echo $donnees['contenu']; ?>
-        </p>
-        <p>
-        <em>Date du Billet : <?php echo $donnees['date_creation']; ?>,</em>
-        <!-- Mise en place du lien vers la page Commentaire -->
-        <a href="commentaires.php?id=<?php echo $donnees['id']; ?>">Commentaire de ce billet</a>
-       </p>
-
-    <?php
-         // Fin de la boucle des billets
-
-    }
-    // Termine le traitement de la requête
-
-    $reponse->closeCursor(); 
-
-?>
-    <a href="inscription.php">S'inscrire</a>/<a href="connexion.php">Connexion</a>
-    </body>
-</html>

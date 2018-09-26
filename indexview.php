@@ -1,0 +1,43 @@
+<!-- Affichage -->
+
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Mon blog avec commentaires</title>
+        <link href="style.css" rel="stylesheet" /> 
+    </head>
+        
+    <body>
+        <h1>Mon super blog !</h1>
+        <p>Les billets du blog :</p>
+ 
+        
+        <?php
+        while ($donnees = $req->fetch())
+        {
+        ?>
+        <div class="news">
+            <h3>
+                <?php echo htmlspecialchars($donnees['titre']); ?>
+                <em>le <?php echo $donnees['date_creation_fr']; ?></em>
+            </h3>
+            
+            <p>
+            <?php
+            echo nl2br(htmlspecialchars($donnees['contenu']));
+            ?>
+            <br />
+            <em><a href="commentaires.php?id=<?php echo $donnees['id']; ?>">Commentaire de ce billet</a></em>
+            </p>
+
+        </div>
+        <?php
+        }
+        $req->closeCursor();
+        ?>
+        <a href="inscription.php">S'inscrire</a>/<a href="connexion.php">Connexion</a>
+
+    </body>
+</html>

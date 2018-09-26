@@ -1,16 +1,23 @@
 <?php
-    // Connexion à ma base de données TPBlog
-    try
-    {
-        $bdd = new PDO('mysql:host=localhost;dbname=TPBlog;charset=utf8', 'tpblog', 'tpblog');
-    }
-    catch(Exception $e)
-    {
-            die('Erreur : '.$e->getMessage());
-    }
-?>
+     session_start();
 
-<?php 
+    // DB Acces  TPBlog
+    require('model.php');
+
+    $req = getBillets();
+
+
+?>
+<?php
+    // On teste la session à l'affichage
+
+    if (isset($_SESSION['id']) AND isset($_SESSION['pseudo']))
+    {
+        echo 'Bonjour, votre numéro de session est:" ' . $_SESSION['pseudo'];
+    }
+
+?>
+<?php
     if (isset($_POST["pseudo"])) {
    
 
@@ -23,8 +30,8 @@
 
         // Vérification d'un pseudo unique
 
-        $req = $bdd->prepare('SELECT count(id) AS nbre_occurences FROM membres WHERE pseudo = :login');
-        $req->execute(array('login' => $_POST['login']));
+        $req = $bdd->prepare('SELECT count(id) AS nbre_occurences FROM membres WHERE pseudonyme = :pseudo');
+        $req->execute(array('pseudo' => $_POST['pseudo']));
          
         $donnees = $req->fetch();
         $nbre_occurences = $donnees['nbre_occurences'];
@@ -32,7 +39,7 @@
              
         if ($nbre_occurences == 0)
         {
-            echo 'pseudo conforme';
+            //echo 'pseudo conforme';
         }
         else
         {
@@ -46,7 +53,7 @@
          $email = $_POST['email'];
      
         if (preg_match('#[a-z0-9\.-_]{1,}\@[a-z0-9\.-_]{1,}\.[a-z]{1,}#', $email)) {
-            echo 'Mail conforme';
+           // echo 'Mail conforme';
         }
         
         else {
@@ -60,7 +67,7 @@
         $password = $_POST['password'];
      
         if (preg_match('#[a-zA-Z]{4,}#', $password)) {
-            echo 'Mot de passe conforme';
+           // echo 'Mot de passe conforme';
         }
         
         else {
@@ -73,7 +80,7 @@
         // Confirmation du mot de passe
      
         if ( $password == $confirmpassword) {
-            echo 'Confirmation correcte';
+           // echo 'Confirmation correcte';
         }
         
         else {
@@ -99,19 +106,23 @@
             } 
     
         // Mise en place de la session
+           
+       if ($result == true) {
+          //  $cookie_name = "membres";
+            // On génère quelque chose d'aléatoire
+          //  $membres = session_id().microtime().rand(0,9999999999);
+           // $membres = $bdd->lastinsertid;
+          //  echo $membres;
+            // on hash pour avoir quelque chose de propre qui aura toujours la même forme
+           // $membres = hash('sha512', $membres);
+            // On enregistre des deux cotés
+          //  setcookie($cookie_name, $membres, time() + (60 * 20)); // Expire au bout de 20 min
+            $_SESSION['membres'] = "toto";
 
-       /* session_start();
+            // Redirection vers page Accueil
+            header("Location: index.php");
 
-        $cookie_name = "membre";
-        // On génère quelque chose d'aléatoire
-        $membre = session_id().microtime().rand(0,9999999999);
-        // on hash pour avoir quelque chose de propre qui aura toujours la même forme
-        $membre = hash('sha512', $membre);
-
-        // On enregistre des deux cotés
-        setcookie($cookie_name, $membre, time() + (60 * 20)); // Expire au bout de 20 min
-        $_SESSION['membre'] = $membre;*/
-
+            }
         }
     }
 ?>

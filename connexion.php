@@ -1,54 +1,50 @@
 <?php
-    // Connexion à ma base de données TPBlog
-    try
-    {
-        $bdd = new PDO('mysql:host=localhost;dbname=TPBlog;charset=utf8', 'tpblog', 'tpblog');
-    }
-    catch(Exception $e)
-    {
-            die('Erreur : '.$e->getMessage());
-    }
+     session_start();
+
+    // DB Acces  TPBlog
+    require('model.php');
+
+    $req = getBillets();
+
 ?>
 <?php 
-
-if (isset($_POST["email"])) {
+    if (isset($_POST["email"])) {
    
+        // Vérification de la validité des informations
+        $error = false;
 
-    // Vérification de la validité des informations
-    $error = false;
+        $email = $_POST["email"];
+        $pass = $_POST["pass"];
 
-    $email = $_POST["email"];
-    $pass = $_POST["pass"];
+        //  Récupération de l'utilisateur et de son pass hashé
+        $req = $bdd->prepare('SELECT id, pass FROM membres WHERE pseudo = :pseudo');
+        $req->execute(array(
+            'pseudo' => $pseudo));
+        $resultat = $req->fetch();
 
-    //  Récupération de l'utilisateur et de son pass hashé
-    $req = $bdd->prepare('SELECT id, pass FROM membres WHERE pseudo = :pseudo');
-    $req->execute(array(
-        'pseudo' => $pseudo));
-    $resultat = $req->fetch();
+        // Comparaison du pass envoyé via le formulaire avec la base
+        $isPasswordCorrect = password_verify($_POST['pass'], $resultat['pass']);
 
-    // Comparaison du pass envoyé via le formulaire avec la base
-    $isPasswordCorrect = password_verify($_POST['pass'], $resultat['pass']);
-
-    if (!$resultat)
-    {
-        echo 'Mauvais identifiant ou mot de passe !';
-    }
-    else
-    {
-        if ($isPasswordCorrect) {
-            session_start();
-            $_SESSION['id'] = $resultat['id'];
-            $_SESSION['pseudo'] = $pseudo;
-            echo 'Vous êtes connecté !';
-        }
-        else {
+        if (!$resultat)
+        {
             echo 'Mauvais identifiant ou mot de passe !';
         }
-    }
-  }
+        else
+        {
+            if ($isPasswordCorrect) {
+                session_start();
+                $_SESSION['id'] = $resultat['id'];
+                $_SESSION['pseudo'] = $pseudo;
+                echo 'Vous êtes connecté !';
+            }
+            else {
+                echo 'Mauvais identifiant ou mot de passe !';
+            }
+        }
+      }
 // Mise en place de la session
 
-    session_start();
+  /*  session_start();
 
     $cookie_name = "membre";
     // On génère quelque chose d'aléatoire
@@ -67,7 +63,7 @@ if (isset($_POST["email"])) {
     if(!isset($_COOKIE[$name])) {
         // Le navigateur ne semble pas accepter les cookies
     }
-
+*/
 ?>
 <!DOCTYPE html>
 <html>
