@@ -4,8 +4,8 @@
     // DB Acces  TPBlog
     require('model.php');
 
-    $req = getBillets();
-
+    $req = getPosts();
+    $bdd = getConnexionBDD();
 
 ?>
 <?php

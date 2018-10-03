@@ -4,26 +4,19 @@
     // DB Acces  TPBlog
     require('model.php');
 
-    $req = getBillets();
+    $req = getPosts();
 
-?>
-<?php 
+
     if (isset($_POST["email"])) {
    
         // Vérification de la validité des informations
         $error = false;
 
-        $email = $_POST["email"];
-        $pass = $_POST["pass"];
-
-        //  Récupération de l'utilisateur et de son pass hashé
-        $req = $bdd->prepare('SELECT id, pass FROM membres WHERE pseudo = :pseudo');
-        $req->execute(array(
-            'pseudo' => $pseudo));
-        $resultat = $req->fetch();
-
+        $resultat = getMember();
+        var_dump($resultat);
+        var_dump($_POST);
         // Comparaison du pass envoyé via le formulaire avec la base
-        $isPasswordCorrect = password_verify($_POST['pass'], $resultat['pass']);
+        $isPasswordCorrect = password_verify($_POST['password'], $resultat['password']);
 
         if (!$resultat)
         {
@@ -34,11 +27,11 @@
             if ($isPasswordCorrect) {
                 session_start();
                 $_SESSION['id'] = $resultat['id'];
-                $_SESSION['pseudo'] = $pseudo;
+                $_SESSION['email'] = $email;
                 echo 'Vous êtes connecté !';
             }
             else {
-                echo 'Mauvais identifiant ou mot de passe !';
+                echo 'plop!';
             }
         }
       }
@@ -64,6 +57,8 @@
         // Le navigateur ne semble pas accepter les cookies
     }
 */
+          echo password_hash('raphael2018', PASSWORD_DEFAULT);
+
 ?>
 <!DOCTYPE html>
 <html>

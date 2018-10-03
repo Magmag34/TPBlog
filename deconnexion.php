@@ -4,7 +4,7 @@
     // DB Acces  TPBlog    
     require('model.php');
 
-    $req = getBillets();
+    $req = getPosts();
 
 
     // On teste la session à l'affichage
