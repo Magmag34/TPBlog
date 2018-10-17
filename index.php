@@ -1,19 +1,17 @@
 <?php
     session_start();
 
-    // DB Acces  TPBlog
-    require('model.php');
+    require('model/frontend.php');
 
-    $req = getPosts();
-    $bdd = getConnexionBDD();
+    $articles = getArticles();
 
-    require('indexview.php');
+    require('view/frontend/indexview.php');
 
     // On teste la session à l'affichage
 
-    if (isset($_SESSION['id']) AND isset($_SESSION['pseudo']))
+    /*if (isset($_SESSION['pseudonym']))
     {
-        echo 'Bonjour, votre numéro de session est:" ' . $_SESSION['pseudo'];
+        echo 'Bonjour, votre numéro de session est:" ' . $_SESSION['pseudonym'];
     }
-
+    */
 
