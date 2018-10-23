@@ -1,11 +1,11 @@
 <?php
     session_start();
 
-    require('model/frontend.php');
+    require('model/model.php');
+    require('controller/controller.php');
+    listArticle();
+    //listArticleComments();
 
-    $articles = getArticles();
-
-    require('view/frontend/indexview.php');
 
     // On teste la session à l'affichage
 
@@ -15,3 +15,10 @@
     }
     */
 
+    //TEST des pages sous controller
+    //getMemberConnexion();
+    //require('../model/frontend.php');
+    //require('../view/frontend/connexionview.php')
+
+    //disconnectionMember();
+    //require('../model/model.php');

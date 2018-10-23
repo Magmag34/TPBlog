@@ -32,14 +32,16 @@ while ($index < count($articles))
 
 if(isset($_SESSION['pseudonym'])){
     ?>
-    <a href="controller/deconnexion.php">Deconnexion</a>        
+    <a href="controller/deconnexion.php">Deconnexion</a>  
+    <--!A MODIFIER SELON ACTION-->      
     <?php
 } else {
     ?>
-    <a href="controller/inscription.php">S'inscrire</a>/<a href="controller/connexion.php">Connexion</a>
+    <a href="?action=inscription">S'inscrire</a>/<a href="controller/connexion.php">Connexion</a>
+    <--!A MODIFIER SELON ACTION--> 
     <?php
 }
 ?>
 <?php $page = ob_get_clean(); ?>
 
-<?php require('controller/frontend.php'); ?>
+<?php require('view/template.php'); ?>
